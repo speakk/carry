@@ -1,3 +1,5 @@
+local love = require("love") -- Needed to make the lsp happy
+
 -- Globals
 require("libs.batteries"):export()
 Concord = require "libs.concord"

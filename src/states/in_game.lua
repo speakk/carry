@@ -1,18 +1,25 @@
 local in_game = {}
 
-function in_game:enter(state)	
-	print("Initializing world")	
+function in_game:enter(_)
+	print("Initializing world")
 	self.world = Concord.world()
 
 	self.world:addSystems(
 		Systems.draw_system,
-		Systems.physics
+		Systems.physics,
+		Systems.map,
+		Systems.player_controls
 	)
 
-	local player = Concord.entity(self.world)
+	Concord.entity(self.world)
 		:give("position", 100, 100)
 		:give("drawable")
 		:give("physics_object")
+		:give("player_controlled")
+
+		Concord.entity(self.world)
+			:give("map", "map01")
+			:give("position", 0, 0)
 end
 
 function in_game:update(dt)
