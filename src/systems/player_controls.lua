@@ -13,28 +13,14 @@ end
 function PlayerControls:update(dt)
 	for _, entity in ipairs(self.pool) do
 		local player_input = entity.player_controlled.input
-		local movement_vector = vec2(0, 0)
-		local movement_speed = 1000
+		player_input:update()
 
-		if player_input:pressed("left") then
-			movement_vector.x = movement_vector.x - 1
-		end
+		local movement_speed = 300
 
-		if player_input:pressed("right") then
-			movement_vector.x = movement_vector.x + 1
-		end
-
-		if player_input:pressed("up") then
-			movement_vector.y = movement_vector.y - 1
-		end
-
-		if player_input:pressed("down") then
-			movement_vector.y = movement_vector.y + 1
-		end
+		local input_x, input_y = player_input:get("move")
 
 		local body = entity.physics_object.body
-		local final_vector = movement_vector * movement_speed
-		body:applyForce(final_vector:unpack())
+		body:applyForce(input_x * movement_speed, input_y * movement_speed)
 	end
 end
 
