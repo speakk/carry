@@ -3,14 +3,32 @@ local PhysicsSystem = Concord.system({
 	physics_world = {"physics_world"}
 })
 
+local function beginContact(a, b, coll)
+
+end
+
+local function endContact(a, b, coll)
+
+end
+
+local function preSolve(a, b, coll)
+
+end
+
+local function postSolve(a, b, coll, normalimpulse, tangentimpulse)
+
+end
+
+
 function PhysicsSystem:init()
 	love.physics.setMeter(32) -- 32px
 	--create a world for the bodies to exist in with horizontal gravity of 0 and vertical gravity of 9.81
 
 	local physics_world = love.physics.newWorld(0, 9.81*64, true)
+	physics_world:setCallbacks(beginContact, endContact, preSolve, postSolve)
 
 	Concord.entity(self:getWorld())
-		:give("physics_world", physics_world)
+	:give("physics_world", physics_world)
 
 	print("Are we init")
 	self.pool.onAdded = function(_, entity)

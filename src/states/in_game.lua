@@ -8,18 +8,25 @@ function in_game:enter(_)
 		Systems.draw_system,
 		Systems.physics,
 		Systems.map,
-		Systems.player_controls
+		Systems.player_controls,
+		Systems.roped_to
 	)
 
-	Concord.entity(self.world)
+	local player = Concord.entity(self.world)
 		:give("position", 100, 100)
 		:give("drawable")
 		:give("physics_object")
 		:give("player_controlled")
 
-		Concord.entity(self.world)
-			:give("map", "map01")
-			:give("position", 0, 0)
+	Concord.entity(self.world)
+		:give("position", 100, 150)
+		:give("drawable")
+		:give("physics_object")
+		:give("roped_to", player)
+
+	Concord.entity(self.world)
+		:give("map", "map01")
+		:give("position", 0, 0)
 end
 
 function in_game:update(dt)

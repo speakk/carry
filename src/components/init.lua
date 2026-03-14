@@ -19,3 +19,7 @@ Concord.component("map", function(self, name)
 end)
 
 Concord.component("player_controlled")
+
+Concord.component("roped_to", function(self, rope_target_entity)
+	self.rope_target_entity = rope_target_entity
+end)
