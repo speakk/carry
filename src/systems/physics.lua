@@ -38,6 +38,13 @@ function PhysicsSystem:init()
 		local type = "dynamic"
 		local radius = 10
 		physics_commponent.body = love.physics.newCircleBody(physics_world, type, position.x, position.y, radius)
+
+		local properties = physics_commponent.properties
+		if properties then
+			if properties.mass then
+				physics_commponent.body:setMass(properties.mass)
+			end
+		end
 	end
 end
 

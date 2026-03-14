@@ -12,10 +12,13 @@ local states = require("src.states.states")
 local input = require("src.input")
 
 function love.update(dt)
-  input:update()
 	states:update(dt)
 end
 
 function love.draw()
 	states:draw()
+end
+
+function love.resize(w, h)
+	states:_call("resize", w, h)
 end

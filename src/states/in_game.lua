@@ -13,16 +13,18 @@ function in_game:enter(_)
 	)
 
 	local player = Concord.entity(self.world)
-		:give("position", 100, 100)
+		:give("position", 200, 100)
 		:give("drawable")
 		:give("physics_object")
 		:give("player_controlled")
+		:give("player_controllable")
 
 	Concord.entity(self.world)
-		:give("position", 100, 150)
+		:give("position", 200, 200)
 		:give("drawable")
-		:give("physics_object")
+		:give("physics_object", { mass = 0.5 })
 		:give("roped_to", player)
+		:give("player_controllable")
 
 	Concord.entity(self.world)
 		:give("map", "map01")
@@ -35,6 +37,10 @@ end
 
 function in_game:draw()
 	self.world:emit("draw")
+end
+
+function in_game:resize(w, h)
+	self.world:emit("resize", w, h)
 end
 
 return in_game

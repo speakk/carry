@@ -5,8 +5,8 @@ end)
 
 Concord.component("drawable")
 
-Concord.component("physics_object", function(self, shape)
-	self.shape = shape
+Concord.component("physics_object", function(self, properties)
+	self.properties = properties
 end)
 
 Concord.component("physics_world", function(self, physics_world)
@@ -19,6 +19,7 @@ Concord.component("map", function(self, name)
 end)
 
 Concord.component("player_controlled")
+Concord.component("player_controllable")
 
 Concord.component("roped_to", function(self, rope_target_entity)
 	self.rope_target_entity = rope_target_entity
