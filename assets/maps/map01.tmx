@@ -6,7 +6,7 @@
  <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32" tilecount="4" columns="4">
   <image source="../sprites/tiles.png" width="128" height="32"/>
  </tileset>
- <layer id="1" name="Tile Layer 1" width="128" height="32">
+ <layer id="1" name="tiles" width="128" height="32">
   <properties>
    <property name="collidable" type="bool" value="true"/>
    <property name="friction" type="float" value="1"/>

@@ -1210,7 +1210,7 @@ function Map:getTileProperties(layer, x, y)
 	local tile = self.layers[layer].data[y][x]
 
 	if not tile then
-		return {}
+		return nil
 	end
 
 	return tile.properties

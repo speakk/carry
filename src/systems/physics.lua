@@ -21,17 +21,17 @@ local function isMap(shape)
 	return shape:getType() == "polygon"
 end
 
+
+-- TODO: Unused for now because we have positionOnGround in player_oontrols
 local function beginContact(world, player_pool, a, b, coll)
 	if isPlayer(a, player_pool) and isMap(b) or isPlayer(b, player_pool) and isMap(a) then
 		world:emit("player_ground_start")
-		print("player_ground_start")
 	end
 end
 
 local function endContact(world, player_pool, a, b, coll)
 	if isPlayer(a, player_pool) and isMap(b) or isPlayer(b, player_pool) and isMap(a) then
 		world:emit("player_ground_end")
-		print("player_ground_end")
 	end
 end
 
@@ -68,6 +68,7 @@ function PhysicsSystem:init()
 		local type = "dynamic"
 		local radius = 10
 		physics_commponent.body = love.physics.newCircleBody(physics_world, type, position.x, position.y, radius)
+		physics_commponent.body:getShape():setRestitution(0.0)
 
 		local properties = physics_commponent.properties
 		if properties then
