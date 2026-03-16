@@ -27,7 +27,7 @@ end
 local function positionOnGround(x, y, map)
 	local tile_x, tile_y = map:convertPixelToTile(x, y + 26)
 	local layer = map.layers["tiles"]
-	local has_tile = layer.data[math.floor(tile_y)] and layer.data[math.floor(tile_y)][math.floor(tile_x)]
+	local has_tile = layer.data[math.floor(tile_y)] and layer.data[math.floor(tile_y)][math.floor(tile_x+1)]
 	return has_tile
 end
 
