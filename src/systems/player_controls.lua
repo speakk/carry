@@ -57,10 +57,16 @@ function PlayerControls:update(dt)
 			body:setAngularDamping(10000.0)
 			body:setLinearVelocity(0, 0)
 			body:setMass(3.2)
-		else
+		end
+
+		if player_input:released "hold" then
 			shape:setFriction(0.1)
 			body:setAngularDamping(0.1)
 			body:setMass(0.2)
+		end
+
+		if player_input:pressed "jump" and on_ground then
+			body:applyLinearImpulse(0, -300)
 		end
 
 		if player_input:pressed "switch" then
