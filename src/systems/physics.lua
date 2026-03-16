@@ -1,14 +1,38 @@
 local PhysicsSystem = Concord.system({
 	pool = {"position", "physics_object"},
-	physics_world = {"physics_world"}
+	physics_world = {"physics_world"},
+	player_pool = {"player_controlled", "physics_object"}
 })
 
-local function beginContact(a, b, coll)
+local function isPlayer(shape, player_pool)
+	for _, entity in ipairs(player_pool) do
+		local physics_object = entity.physics_object
+		if physics_object.body == shape:getBody() then
+			return true
+		end
+	end
 
+	return false
+	-- if shape:getBody()
+	-- return shape:getType() == "circle"
 end
 
-local function endContact(a, b, coll)
+local function isMap(shape)
+	return shape:getType() == "polygon"
+end
 
+local function beginContact(world, player_pool, a, b, coll)
+	if isPlayer(a, player_pool) and isMap(b) or isPlayer(b, player_pool) and isMap(a) then
+		world:emit("player_ground_start")
+		print("player_ground_start")
+	end
+end
+
+local function endContact(world, player_pool, a, b, coll)
+	if isPlayer(a, player_pool) and isMap(b) or isPlayer(b, player_pool) and isMap(a) then
+		world:emit("player_ground_end")
+		print("player_ground_end")
+	end
 end
 
 local function preSolve(a, b, coll)
@@ -25,7 +49,13 @@ function PhysicsSystem:init()
 	--create a world for the bodies to exist in with horizontal gravity of 0 and vertical gravity of 9.81
 
 	local physics_world = love.physics.newWorld(0, 9.81*64, true)
-	physics_world:setCallbacks(beginContact, endContact, preSolve, postSolve)
+	physics_world:setCallbacks(
+		function(a, b, coll)
+			beginContact(self:getWorld(), self.player_pool, a, b, coll)
+		end,
+		function(a, b, coll)
+			endContact(self:getWorld(), self.player_pool, a, b, coll)
+		end, preSolve, postSolve)
 
 	Concord.entity(self:getWorld())
 	:give("physics_world", physics_world)

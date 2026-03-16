@@ -9,7 +9,7 @@ function RopedTo:init()
 		local x1, y1 = entity.position.x, entity.position.y
 		local x2, y2 = target_entity.position.x, target_entity.position.y
 		local max_length = vec2(x1, y1):distance(vec2(x2, y2))
-		local collide_connected = true
+		local collide_connected = false
 		local joint = love.physics.newRopeJoint(entity.physics_object.body, target_entity.physics_object.body, x1, y1, x2, y2, max_length, collide_connected)
 		roped_to.joint = joint
 	end

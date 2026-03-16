@@ -18,7 +18,9 @@ Concord.component("map", function(self, name)
 	self.loaded_map = nil
 end)
 
-Concord.component("player_controlled")
+Concord.component("player_controlled", function(self)
+	self.on_ground = false
+end)
 Concord.component("player_controllable")
 
 Concord.component("roped_to", function(self, rope_target_entity)

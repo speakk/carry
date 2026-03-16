@@ -11,6 +11,18 @@ function PlayerControls:init()
 	end
 end
 
+function PlayerControls:player_ground_start()
+	for _, entity in ipairs(self.pool) do
+		entity.player_controlled.on_ground = true
+	end
+end
+
+function PlayerControls:player_ground_end()
+	for _, entity in ipairs(self.pool) do
+		entity.player_controlled.on_ground = false
+	end
+end
+
 function PlayerControls:update(dt)
 	for _, entity in ipairs(self.pool) do
 		local player_input = entity.player_controlled.input
@@ -24,7 +36,7 @@ function PlayerControls:update(dt)
 		body:applyForce(input_x * movement_speed, input_y * movement_speed)
 
 		local shape = body:getShape()
-		if player_input:down "hold" then
+		if player_input:down "hold" and entity.player_controlled.on_ground then
 			shape:setFriction(1.0)
 			body:setAngularVelocity(0)
 			body:setAngularDamping(10000.0)
