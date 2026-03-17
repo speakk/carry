@@ -30,12 +30,4 @@ function MapSystem:resize(w, h)
 	end
 end
 
-function MapSystem:draw()
-	love.graphics.setColor(1, 1, 1, 1)
-	for _, entity in ipairs(self.pool) do
-		entity.map.loaded_map:draw()
-		--entity.map.loaded_map:box2d_draw()
-	end
-end
-
 return MapSystem
