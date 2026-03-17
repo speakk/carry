@@ -4,12 +4,22 @@ local DrawSystem = Concord.system({
 	map = { "map" }
 })
 
-function DrawSystem:draw()
+local previous_camera_x, previous_camera_y = 0, 0
+local cameraX, cameraY = 0, 0
+
+function DrawSystem:update(dt)
 	local window_width, window_height = love.graphics.getDimensions()
 
+	local cam_speed = 3
+	local eps = 1
 	local player_position = self.camera_follow:get(1).position
-	local cameraX, cameraY = player_position.x - window_width / 2, player_position.y - window_height / 2
+	cameraX, cameraY = math.lerp_eps(previous_camera_x, player_position.x - window_width / 2, cam_speed * dt, eps),
+		math.lerp_eps(previous_camera_y, player_position.y - window_height / 2, cam_speed * dt, eps)
 
+	previous_camera_x, previous_camera_y = cameraX, cameraY
+end
+
+function DrawSystem:draw()
 	love.graphics.push()
 	love.graphics.translate(-cameraX, -cameraY)
 
