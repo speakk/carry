@@ -9,6 +9,7 @@ function in_game:enter(_)
 		Systems.map,
 		Systems.player_controls,
 		Systems.roped_to,
+		Systems.collectable,
 		Systems.draw_system
 	)
 

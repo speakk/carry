@@ -29,30 +29,34 @@ end
 function MapSystem:player_spawn_object_created(player_spawn_object)
 	local x, y = player_spawn_object.x, player_spawn_object.y
 
-	local player = Concord.entity(self:getWorld())
+	local player_ball_1 = Concord.entity(self:getWorld())
 		:give("position", x, y)
 		:give("drawable")
-		:give("physics_object")
 		:give("player_controlled")
 		:give("player_controllable")
 
-	Concord.entity(self:getWorld())
+	player_ball_1:give("physics_object", { userData = { is_player = true, entity = player_ball_1 } })
+
+	local player_ball_2 = Concord.entity(self:getWorld())
 		:give("position", x + 100, y)
 		:give("drawable")
-		:give("physics_object")
-		:give("roped_to", player)
+		:give("roped_to", player_ball_1)
 		:give("player_controlled")
 		:give("player_controllable")
+
+	player_ball_2:give("physics_object", { userData = { is_player = true, entity = player_ball_2 } })
 end
 
 function MapSystem:collectable_object_created(collectable_object)
 	local x, y = collectable_object.x, collectable_object.y
 
-	Concord.entity(self:getWorld())
+	local collectable = Concord.entity(self:getWorld())
 		:give("position", x, y)
 		:give("drawable", {
 			sprite = "collectable.png"
 		})
+	
+	collectable:give("physics_object", { userData = { is_collectable = true, entity = collectable }, type = "static", sensor = true })
 end
 
 function MapSystem:update(dt)

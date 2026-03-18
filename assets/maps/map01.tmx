@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="48" height="128" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="10">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="48" height="128" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="11">
  <editorsettings>
   <export target="map01.lua" format="lua"/>
  </editorsettings>
@@ -143,6 +143,9 @@
 </data>
  </layer>
  <objectgroup id="2" name="collectables">
+  <properties>
+   <property name="collectable" type="bool" value="true"/>
+  </properties>
   <object id="2" x="1428" y="4016">
    <point/>
   </object>
@@ -164,6 +167,7 @@
   <object id="8" x="1194" y="2264">
    <point/>
   </object>
+  <object id="10" x="354" y="3966" width="170" height="70"/>
  </objectgroup>
  <objectgroup id="3" name="player_spawn">
   <object id="9" x="78" y="4016">

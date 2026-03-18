@@ -52,7 +52,8 @@ function DrawSystem:draw()
 	for _, e in ipairs(self.pool) do
 		if e.drawable.sprite then
 			love.graphics.setColor(1, 1, 1, 1)
-			love.graphics.draw(e.drawable.loaded_sprite, e.position.x, e.position.y)
+			love.graphics.draw(e.drawable.loaded_sprite, e.position.x, e.position.y,
+			0, 1, 1, e.drawable.loaded_sprite:getWidth() / 2, e.drawable.loaded_sprite:getHeight() / 2)
 		else
 			love.graphics.setColor(1, 1, 1, 1)
 

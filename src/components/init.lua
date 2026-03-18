@@ -11,6 +11,7 @@ end)
 
 Concord.component("physics_object", function(self, properties)
 	self.properties = properties
+	self.userData = properties.userData
 end)
 
 Concord.component("physics_world", function(self, physics_world)

@@ -4,17 +4,14 @@ local PhysicsSystem = Concord.system({
 	player_pool = {"player_controlled", "physics_object"}
 })
 
-local function isPlayer(shape, player_pool)
-	for _, entity in ipairs(player_pool) do
-		local physics_object = entity.physics_object
-		if physics_object.body == shape:getBody() then
-			return true
-		end
-	end
+local function isPlayer(shape)
+	local userData = shape:getUserData()
+	return userData and userData.is_player
+end
 
-	return false
-	-- if shape:getBody()
-	-- return shape:getType() == "circle"
+local function isCollectable(shape)
+	local userData = shape:getUserData()
+	return userData and userData.is_collectable
 end
 
 local function isMap(shape)
@@ -23,16 +20,17 @@ end
 
 
 -- TODO: Unused for now because we have positionOnGround in player_oontrols
-local function beginContact(world, player_pool, a, b, coll)
-	if isPlayer(a, player_pool) and isMap(b) or isPlayer(b, player_pool) and isMap(a) then
-		world:emit("player_ground_start")
+local function beginContact(world, a, b, coll)
+	if isPlayer(a) and isCollectable(b) then
+		world:emit("collectable_collected", a:getUserData().entity, b:getUserData().entity)
+	end
+
+	if isPlayer(b) and isCollectable(a) then
+		world:emit("collectable_collected", b:getUserData().entity, a:getUserData().entity)
 	end
 end
 
-local function endContact(world, player_pool, a, b, coll)
-	if isPlayer(a, player_pool) and isMap(b) or isPlayer(b, player_pool) and isMap(a) then
-		world:emit("player_ground_end")
-	end
+local function endContact(world, a, b, coll)
 end
 
 local function preSolve(a, b, coll)
@@ -51,10 +49,10 @@ function PhysicsSystem:init()
 	local physics_world = love.physics.newWorld(0, 9.81*64, true)
 	physics_world:setCallbacks(
 		function(a, b, coll)
-			beginContact(self:getWorld(), self.player_pool, a, b, coll)
+			beginContact(self:getWorld(), a, b, coll)
 		end,
 		function(a, b, coll)
-			endContact(self:getWorld(), self.player_pool, a, b, coll)
+			endContact(self:getWorld(), a, b, coll)
 		end, preSolve, postSolve)
 
 	Concord.entity(self:getWorld())
@@ -62,13 +60,20 @@ function PhysicsSystem:init()
 
 	self.pool.onAdded = function(_, entity)
 		local physics_commponent = entity.physics_object
+		local properties = physics_commponent.properties or {}
+
 		local position = entity.position
-		local type = "dynamic"
+		local type = properties.type or "dynamic"
 		local radius = 10
 		physics_commponent.body = love.physics.newCircleBody(physics_world, type, position.x, position.y, radius)
 		physics_commponent.body:getShape():setRestitution(0.0)
 
-		local properties = physics_commponent.properties or {}
+		physics_commponent.body:getShape():setUserData(properties.userData)
+
+		if properties.sensor then
+			physics_commponent.body:getShape():setSensor(false)
+		end
+
 		physics_commponent.body:setMass(properties.mass or 0.2)
 	end
 end

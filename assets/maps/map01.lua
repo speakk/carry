@@ -10,7 +10,7 @@ return {
   tilewidth = 32,
   tileheight = 32,
   nextlayerid = 4,
-  nextobjectid = 10,
+  nextobjectid = 11,
   properties = {},
   tilesets = {
     {
@@ -207,7 +207,9 @@ return {
       offsety = 0,
       parallaxx = 1,
       parallaxy = 1,
-      properties = {},
+      properties = {
+        ["collectable"] = true
+      },
       objects = {
         {
           id = 2,
@@ -296,6 +298,19 @@ return {
           y = 2264,
           width = 0,
           height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 10,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 354,
+          y = 3966,
+          width = 170,
+          height = 70,
           rotation = 0,
           visible = true,
           properties = {}
