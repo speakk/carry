@@ -3,7 +3,11 @@ Concord.component("position", function(self, x, y)
     self.y = y or 0
 end)
 
-Concord.component("drawable")
+Concord.component("drawable", function(self, properties)
+	if properties then
+		self.sprite = properties.sprite
+	end
+end)
 
 Concord.component("physics_object", function(self, properties)
 	self.properties = properties
@@ -25,6 +29,8 @@ end)
 
 -- Can be controlled by a player when activated
 Concord.component("player_controllable")
+
+Concord.component("collectable")
 
 Concord.component("roped_to", function(self, rope_target_entity)
 	self.rope_target_entity = rope_target_entity

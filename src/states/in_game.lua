@@ -5,27 +5,12 @@ function in_game:enter(_)
 	self.world = Concord.world()
 
 	self.world:addSystems(
-		Systems.draw_system,
 		Systems.physics,
 		Systems.map,
 		Systems.player_controls,
-		Systems.roped_to
+		Systems.roped_to,
+		Systems.draw_system
 	)
-
-	local player = Concord.entity(self.world)
-		:give("position", 200, 100)
-		:give("drawable")
-		:give("physics_object")
-		:give("player_controlled")
-		:give("player_controllable")
-
-	Concord.entity(self.world)
-		:give("position", 200, 200)
-		:give("drawable")
-		:give("physics_object")
-		:give("roped_to", player)
-		:give("player_controlled")
-		:give("player_controllable")
 
 	Concord.entity(self.world)
 		:give("map", "map01")

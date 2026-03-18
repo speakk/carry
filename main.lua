@@ -11,6 +11,8 @@ Concord.utils.loadNamespace("src/systems", Systems)
 local states = require("src.states.states")
 local input = require("src.input")
 
+love.graphics.setDefaultFilter("nearest", "nearest")
+
 function love.update(dt)
 	states:update(dt)
 end
