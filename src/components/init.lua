@@ -18,9 +18,12 @@ Concord.component("map", function(self, name)
 	self.loaded_map = nil
 end)
 
+-- Currently under player control
 Concord.component("player_controlled", function(self)
 	self.on_ground = false
 end)
+
+-- Can be controlled by a player when activated
 Concord.component("player_controllable")
 
 Concord.component("roped_to", function(self, rope_target_entity)

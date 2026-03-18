@@ -26,6 +26,7 @@ function DrawSystem:draw()
 	love.graphics.push()
 	love.graphics.translate(-cameraX, -cameraY)
 
+	love.graphics.clear(0.20, 0.14, 0.1, 1)
 	-- Map draw
 	love.graphics.setColor(1, 1, 1, 1)
 	for _, entity in ipairs(self.map) do
@@ -44,6 +45,16 @@ function DrawSystem:draw()
 		love.graphics.circle("fill", e.position.x, e.position.y, 10)
 	end
 	-- Player draw end
+
+
+-- 	if ll then love.graphics.setColor(0, 1, 1, 1) else love.graphics.setColor(1,0,0,1) end
+-- 	love.graphics.circle("fill", lx * 32, ly * 32, 4)
+-- 	if aa then love.graphics.setColor(0, 1, 1, 1) else love.graphics.setColor(1,0,0,1) end
+-- 	love.graphics.circle("fill", ax * 32, ay * 32, 4)
+-- 	if bb then love.graphics.setColor(0, 1, 1, 1) else love.graphics.setColor(1,0,0,1) end
+-- 	love.graphics.circle("fill", bx * 32, by * 32, 4)
+-- 	if rr then love.graphics.setColor(0, 1, 1, 1) else love.graphics.setColor(1,0,0,1) end
+-- 	love.graphics.circle("fill", rx * 32, ry * 32, 4)
 
 	love.graphics.pop()
 end

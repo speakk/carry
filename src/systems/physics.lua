@@ -60,9 +60,7 @@ function PhysicsSystem:init()
 	Concord.entity(self:getWorld())
 	:give("physics_world", physics_world)
 
-	print("Are we init")
 	self.pool.onAdded = function(_, entity)
-		print("Added to pool")
 		local physics_commponent = entity.physics_object
 		local position = entity.position
 		local type = "dynamic"
@@ -70,12 +68,8 @@ function PhysicsSystem:init()
 		physics_commponent.body = love.physics.newCircleBody(physics_world, type, position.x, position.y, radius)
 		physics_commponent.body:getShape():setRestitution(0.0)
 
-		local properties = physics_commponent.properties
-		if properties then
-			if properties.mass then
-				physics_commponent.body:setMass(properties.mass)
-			end
-		end
+		local properties = physics_commponent.properties or {}
+		physics_commponent.body:setMass(properties.mass or 0.2)
 	end
 end
 
