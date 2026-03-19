@@ -64,8 +64,12 @@ function DrawSystem:update(dt)
 	local player_entity = self.camera_follow:get(1)
 	if player_entity then
 		local player_position = player_entity.position
-		cameraX, cameraY = damp(previous_camera_x, player_position.x, cam_speed, dt),
-		damp(previous_camera_y, player_position.y, cam_speed, dt)
+		if vec2(cameraX, cameraY):distance(vec2(player_position.x, player_position.y)) < 500 then
+			cameraX, cameraY = damp(previous_camera_x, player_position.x, cam_speed, dt),
+			damp(previous_camera_y, player_position.y, cam_speed, dt)
+		else
+			cameraX, cameraY = player_position.x, player_position.y
+		end
 
 		local camera_move_amount = vec2(cameraX, cameraY):distance(vec2(previous_camera_x, previous_camera_y))
 		local camera_zoom_speed_multiplier = 0.03
@@ -110,13 +114,15 @@ function DrawSystem:draw()
 				love.graphics.setColor(1, 1, 1, 1)
 				love.graphics.draw(e.drawable.loaded_sprite, e.position.x, e.position.y,
 				0, 1, 1, e.drawable.loaded_sprite:getWidth() / 2, e.drawable.loaded_sprite:getHeight() / 2)
-			else
+			elseif e.circle then
 				love.graphics.setColor(1, 1, 1, 1)
 
 				if e:has("player_controlled") then
 					love.graphics.setColor(1, 0.5, 0.5, 1)
 				end
 				love.graphics.circle("fill", e.position.x, e.position.y, 10)
+			elseif e.particle_emitter then
+				love.graphics.draw(e.particle_emitter.system, e.position.x, e.position.y)
 			end
 		end
 		-- Player draw end

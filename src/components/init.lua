@@ -9,6 +9,9 @@ Concord.component("drawable", function(self, properties)
 	end
 end)
 
+Concord.component("circle")
+Concord.component("particle_emitter")
+
 Concord.component("physics_object", function(self, properties)
 	self.properties = properties
 	self.userData = properties.userData
