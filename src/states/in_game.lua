@@ -10,6 +10,7 @@ function in_game:enter(_)
 		Systems.player_controls,
 		Systems.roped_to,
 		Systems.collectable,
+		Systems.particle,
 		Systems.draw_system
 	)
 

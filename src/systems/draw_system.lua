@@ -114,14 +114,16 @@ function DrawSystem:draw()
 				love.graphics.setColor(1, 1, 1, 1)
 				love.graphics.draw(e.drawable.loaded_sprite, e.position.x, e.position.y,
 				0, 1, 1, e.drawable.loaded_sprite:getWidth() / 2, e.drawable.loaded_sprite:getHeight() / 2)
-			elseif e.circle then
+			end
+			if e.circle then
 				love.graphics.setColor(1, 1, 1, 1)
 
 				if e:has("player_controlled") then
 					love.graphics.setColor(1, 0.5, 0.5, 1)
 				end
 				love.graphics.circle("fill", e.position.x, e.position.y, 10)
-			elseif e.particle_emitter then
+			end
+			if e.particle_emitter then
 				love.graphics.draw(e.particle_emitter.system, e.position.x, e.position.y)
 			end
 		end

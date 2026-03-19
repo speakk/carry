@@ -57,6 +57,7 @@ function MapSystem:collectable_object_created(collectable_object)
 		:give("drawable", {
 			sprite = "collectable.png"
 		})
+		:give("particle_emitter")
 	
 	collectable:give("physics_object", { userData = { is_collectable = true, entity = collectable }, type = "static", sensor = true })
 end
