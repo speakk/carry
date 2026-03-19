@@ -71,7 +71,7 @@ function PhysicsSystem:init()
 		physics_commponent.body:getShape():setUserData(properties.userData)
 
 		if properties.sensor then
-			physics_commponent.body:getShape():setSensor(false)
+			physics_commponent.body:getShape():setSensor(true)
 		end
 
 		physics_commponent.body:setMass(properties.mass or 0.2)

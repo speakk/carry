@@ -38,7 +38,7 @@ function MapSystem:player_spawn_object_created(player_spawn_object)
 	player_ball_1:give("physics_object", { userData = { is_player = true, entity = player_ball_1 } })
 
 	local player_ball_2 = Concord.entity(self:getWorld())
-		:give("position", x + 100, y)
+		:give("position", x + 80, y)
 		:give("drawable")
 		:give("roped_to", player_ball_1)
 		:give("player_controlled")

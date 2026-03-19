@@ -65,6 +65,8 @@ end
 function PlayerControls:update(dt)
 	local loaded_map = self.map:get(1).map.loaded_map
 
+	local should_jump = false
+
 	for _, entity in ipairs(self.pool) do
 		local player_input = entity.player_controlled.input
 		player_input:update()
@@ -103,21 +105,25 @@ function PlayerControls:update(dt)
 		local jump_enabled_radius = 18
 
 		if player_input:pressed "jump" and nextToSolidTile(entity.position.x, entity.position.y, loaded_map, jump_enabled_radius) then
+			should_jump = true
 			-- Apply jump for all player balls
-			for _, player in ipairs(self.pool) do
-				local player_body = player.physics_object.body
-				player_body:applyLinearImpulse(0, -100)
-			end
 		end
 
-		if player_input:pressed "switch" then
-			for _, other_entity in ipairs(self.player_controllables) do
-				if other_entity:has("player_controlled") then
-					other_entity:remove("player_controlled")
-				else
-					other_entity:give("player_controlled")
-				end
-			end
+		-- if player_input:pressed "switch" then
+		-- 	for _, other_entity in ipairs(self.player_controllables) do
+		-- 		if other_entity:has("player_controlled") then
+		-- 			other_entity:remove("player_controlled")
+		-- 		else
+		-- 			other_entity:give("player_controlled")
+		-- 		end
+		-- 	end
+		-- end
+	end
+
+	if should_jump then
+		for _, player in ipairs(self.pool) do
+			local player_body = player.physics_object.body
+			player_body:applyLinearImpulse(0, -80)
 		end
 	end
 end
