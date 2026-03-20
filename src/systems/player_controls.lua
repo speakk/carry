@@ -34,32 +34,34 @@ end
 
 -- GRAB DEBUG
 lx,ly = 0, 0
-ax,ay = 0, 0
+--ax,ay = 0, 0
 bx,by = 0, 0
 rx,ry = 0, 0
-ll,aa,bb,rr = false, false, false, false
+--ll,aa,bb,rr = false, false, false, false
+ll,bb,rr = false, false, false
 
 local function nextToSolidTile(x, y, map, grab_distance)
-	local grab_distance = 14
 	local left_tile_x, left_tile_y = map:convertPixelToTile(x - grab_distance, y)
-	local above_tile_x, above_tile_y = map:convertPixelToTile(x, y - grab_distance)
+	--local above_tile_x, above_tile_y = map:convertPixelToTile(x, y - grab_distance)
 	local below_tile_x, below_tile_y = map:convertPixelToTile(x, y + grab_distance)
 	local right_tile_x, right_tile_y = map:convertPixelToTile(x + grab_distance, y)
 
 	lx, ly = left_tile_x, left_tile_y
-	ax, ay = above_tile_x, above_tile_y
+	--ax, ay = above_tile_x, above_tile_y
 	bx, by = below_tile_x, below_tile_y
 	rx, ry = right_tile_x, right_tile_y
 
 	local layer = map.layers["tiles"]
 	local left = layer.data[math.ceil(left_tile_y)] and layer.data[math.ceil(left_tile_y)][math.ceil(left_tile_x)]
-	local above = layer.data[math.ceil(above_tile_y)] and layer.data[math.ceil(above_tile_y)][math.floor(above_tile_x+1)]
+	--local above = layer.data[math.ceil(above_tile_y)] and layer.data[math.ceil(above_tile_y)][math.floor(above_tile_x+1)]
 	local below = layer.data[math.ceil(below_tile_y)] and layer.data[math.ceil(below_tile_y)][math.floor(below_tile_x+1)]
-	local right = layer.data[math.round(right_tile_y)] and layer.data[math.round(right_tile_y)][math.floor(right_tile_x+1)]
+	local right = layer.data[math.ceil(right_tile_y)] and layer.data[math.ceil(right_tile_y)][math.floor(right_tile_x+1)]
 
-	ll,aa,bb,rr = left, above, below, right
+	--ll,aa,bb,rr = left, above, below, right
+	ll,bb,rr = left, below, right
 
-	return below or above or left or right
+	--return below or above or left or right
+	return below or left or right
 end
 
 function PlayerControls:update(dt)

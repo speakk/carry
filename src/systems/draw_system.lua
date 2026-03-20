@@ -149,14 +149,14 @@ function DrawSystem:draw()
 
 
 
-		-- 	if ll then love.graphics.setColor(0, 1, 1, 1) else love.graphics.setColor(1,0,0,1) end
-		-- 	love.graphics.circle("fill", lx * 32, ly * 32, 4)
-		-- 	if aa then love.graphics.setColor(0, 1, 1, 1) else love.graphics.setColor(1,0,0,1) end
-		-- 	love.graphics.circle("fill", ax * 32, ay * 32, 4)
-		-- 	if bb then love.graphics.setColor(0, 1, 1, 1) else love.graphics.setColor(1,0,0,1) end
-		-- 	love.graphics.circle("fill", bx * 32, by * 32, 4)
-		-- 	if rr then love.graphics.setColor(0, 1, 1, 1) else love.graphics.setColor(1,0,0,1) end
-		-- 	love.graphics.circle("fill", rx * 32, ry * 32, 4)
+		-- if ll then love.graphics.setColor(0, 1, 1, 1) else love.graphics.setColor(1,0,0,1) end
+		-- love.graphics.circle("fill", lx * 32, ly * 32, 4)
+		-- -- if aa then love.graphics.setColor(0, 1, 1, 1) else love.graphics.setColor(1,0,0,1) end
+		-- -- love.graphics.circle("fill", ax * 32, ay * 32, 4)
+		-- if bb then love.graphics.setColor(0, 1, 1, 1) else love.graphics.setColor(1,0,0,1) end
+		-- love.graphics.circle("fill", bx * 32, by * 32, 4)
+		-- if rr then love.graphics.setColor(0, 1, 1, 1) else love.graphics.setColor(1,0,0,1) end
+		-- love.graphics.circle("fill", rx * 32, ry * 32, 4)
 
 		love.graphics.pop()
 	end)
