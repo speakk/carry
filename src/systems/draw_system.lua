@@ -24,8 +24,8 @@ function create_effect(width, height)
 	new_effect.filmgrain.opacity = 0.4
 	new_effect.vignette.opacity = 0.05
 	--new_effect.crt.distortionFactor = { 1.01, 1.01 }
-	new_effect.glow.min_luma = 0.65
-	new_effect.glow.strength = 3
+	new_effect.glow.min_luma = 0.67
+	new_effect.glow.strength = 1
 
 	return new_effect
 end
@@ -110,9 +110,17 @@ function DrawSystem:draw()
 		love.graphics.translate(final_camera_x, final_camera_y)
 
 		for _, e in ipairs(self.pool) do
+			local final_x = e.position.x
+			local final_y = e.position.y
+
+			if e.drawable.offset then
+				final_x = final_x + e.drawable.offset.x
+				final_y = final_y + e.drawable.offset.y
+			end
+
 			if e.drawable.sprite then
 				love.graphics.setColor(1, 1, 1, 1)
-				love.graphics.draw(e.drawable.loaded_sprite, e.position.x, e.position.y,
+				love.graphics.draw(e.drawable.loaded_sprite, final_x, final_y,
 				0, 1, 1, e.drawable.loaded_sprite:getWidth() / 2, e.drawable.loaded_sprite:getHeight() / 2)
 			end
 			if e.circle then
@@ -121,10 +129,10 @@ function DrawSystem:draw()
 				if e:has("player_controlled") then
 					love.graphics.setColor(1, 0.5, 0.5, 1)
 				end
-				love.graphics.circle("fill", e.position.x, e.position.y, 10)
+				love.graphics.circle("fill", final_x, final_y, 10)
 			end
 			if e.particle_emitter then
-				love.graphics.draw(e.particle_emitter.system, e.position.x, e.position.y)
+				love.graphics.draw(e.particle_emitter.system, final_x, final_y)
 			end
 		end
 		-- Player draw end

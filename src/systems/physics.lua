@@ -64,7 +64,7 @@ function PhysicsSystem:init()
 
 		local position = entity.position
 		local type = properties.type or "dynamic"
-		local radius = 10
+		local radius = properties.radius or 10
 		physics_commponent.body = love.physics.newCircleBody(physics_world, type, position.x, position.y, radius)
 		physics_commponent.body:getShape():setRestitution(0.0)
 

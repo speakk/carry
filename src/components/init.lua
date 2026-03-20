@@ -6,6 +6,7 @@ end)
 Concord.component("drawable", function(self, properties)
 	if properties then
 		self.sprite = properties.sprite
+		self.offset = properties.offset
 	end
 end)
 
