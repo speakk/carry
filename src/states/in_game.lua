@@ -11,7 +11,8 @@ function in_game:enter(_)
 		Systems.roped_to,
 		Systems.collectable,
 		Systems.particle,
-		Systems.draw_system
+		Systems.draw_system,
+		Systems.sound
 	)
 
 	Concord.entity(self.world)

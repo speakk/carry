@@ -22,11 +22,23 @@ end
 -- TODO: Unused for now because we have positionOnGround in player_oontrols
 local function beginContact(world, a, b, coll)
 	if isPlayer(a) and isCollectable(b) then
-		world:emit("collectable_collected", a:getUserData().entity, b:getUserData().entity)
+		world:emit("player_collided_with_collectable", a:getUserData().entity, b:getUserData().entity)
 	end
 
 	if isPlayer(b) and isCollectable(a) then
-		world:emit("collectable_collected", b:getUserData().entity, a:getUserData().entity)
+		world:emit("player_collided_with_collectable", b:getUserData().entity, a:getUserData().entity)
+	end
+
+	if isPlayer(a) and isMap(b) then
+		world:emit("player_collided_with_map", a, b, coll)
+	end
+
+	if isPlayer(b) and isMap(a) then
+		world:emit("player_collided_with_map", b, a, coll)
+	end
+
+	if isPlayer(a) and isPlayer(b) then
+		world:emit("player_collided_with_player", a, b)
 	end
 end
 
