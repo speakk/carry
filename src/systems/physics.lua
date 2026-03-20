@@ -88,6 +88,10 @@ function PhysicsSystem:init()
 
 		physics_commponent.body:setMass(properties.mass or 0.2)
 	end
+
+	self.pool.onRemoved = function(_, entity)
+		entity.physics_object.body:destroy()
+	end
 end
 
 function PhysicsSystem:update(dt)
