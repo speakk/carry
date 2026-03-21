@@ -11,18 +11,31 @@ love.graphics.setFont(big_font)
 
 local state = {}
 
+local button_colors = {
+	["normal"] = {0.25, 0.45, 0.75},
+	["hover"] = {0.35, 0.60, 0.95},
+	["pressed"] = {0.65, 0.85, 0.45},
+}
+
+local function style_button(button)
+	button:setSize(300, 80)
+	button:setBackgroundColor(unpack(button_colors["normal"]))
+	button:setPressedColor(unpack(button_colors["pressed"]))
+	button:setHoverColor(unpack(button_colors["hover"]))
+	return button
+end
+
 function state:enter(states)
-	local start_button = TextButton("Start game!")
-    :setSize(300, 80)
+	local start_button = style_button(TextButton("Start game!")
     :onClick(function(button, event)
 				states:set_state("in_game")
-    end)
+    end))
 
-	local quit_button = TextButton("Quit")
+	local quit_button = style_button(TextButton("Quit")
     :setSize(300, 80)
     :onClick(function(button, event)
 				love.event.quit()
-    end)
+    end))
 	
 	local container = Rectangle()
 		:setSize(ennui.Size.fill(), ennui.Size.fill())
