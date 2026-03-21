@@ -16,7 +16,7 @@ function in_game:enter(_)
 	)
 
 	Concord.entity(self.world)
-		:give("map", "map01")
+		:give("map", "map02")
 		:give("position", 0, 0)
 end
 

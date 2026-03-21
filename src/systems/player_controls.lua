@@ -99,7 +99,7 @@ function PlayerControls:update(dt)
 		end
 
 		if player_input:released "hold" then
-			shape:setFriction(0.1)
+			shape:setFriction(0.2)
 			body:setAngularDamping(0.1)
 			--body:setMass(0.2)
 		end

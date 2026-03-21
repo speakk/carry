@@ -87,6 +87,7 @@ function PhysicsSystem:init()
 		end
 
 		physics_commponent.body:setMass(properties.mass or 0.2)
+		physics_commponent.body:setLinearDamping(0.8)
 	end
 
 	self.pool.onRemoved = function(_, entity)
