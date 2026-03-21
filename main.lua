@@ -1,5 +1,6 @@
 local love = require("love") -- Needed to make the lsp happy
 love.setDeprecationOutput(false)
+love.window.setMode(800, 600, { resizable = true })
 
 -- Globals
 require("libs.batteries"):export()
