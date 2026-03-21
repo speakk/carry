@@ -1,0 +1,124 @@
+local EnnuiRoot = (...):sub(1, (...):len() - (".mixins.draggable"):len())
+
+---Mixin for drag interaction functionality
+---@class DraggableMixin
+---@field isDraggable boolean Whether widget can be dragged
+---@field dragMode dragMode Drag mode: "position" or "delta"
+---@field dragHandle table? Drag handle rectangle {x, y, width, height} relative to widget
+---@field dragStart function? Drag lifecycle callback
+---@field drag function? Drag lifecycle callback
+---@field dragEnd function? Drag lifecycle callback
+---@field dragOver function? Drop target callback
+---@field dragLeave function? Drop target callback
+---@field drop function? Drop target callback
+local DraggableMixin = {}
+local AABB = require(EnnuiRoot .. ".utils.aabb")
+local Mixin = require(EnnuiRoot .. ".utils.mixin")
+local PositionableMixin = require(EnnuiRoot .. ".mixins.positionable")
+local ParentableMixin = require(EnnuiRoot .. ".mixins.parentable")
+
+---@alias dragMode "position"|"delta"|"ghost"
+
+---Initialize draggable fields on an instance
+---Call this from the constructor of classes using this mixin
+---@param self table The instance to initialize
+function DraggableMixin.initDraggable(self)
+    self.isDraggable = false
+    self.dragMode = "position"
+    self.dragHandle = nil
+
+    self.dragStart = nil
+    self.drag = nil
+    self.dragEnd = nil
+
+    self.isDropTarget = false
+    self.dragOver = nil
+    self.dragLeave = nil
+    self.drop = nil
+end
+
+---Configure whether this widget is draggable
+---@param draggable boolean Whether the widget can be dragged
+---@param dragHandle table? Optional drag handle rectangle {x, y, width, height}
+---@return self
+function DraggableMixin:setDraggable(draggable, dragHandle)
+    self.isDraggable = draggable
+
+    if dragHandle then
+        self.dragHandle = dragHandle
+    end
+
+    return self
+end
+
+---Set the drag mode ("position", "delta", or "ghost")
+---@param mode dragMode "position" for position-based dragging, "delta" for delta-based, "ghost" for visual-only dragging
+---@return self
+function DraggableMixin:setDragMode(mode)
+    assert(mode == "position" or mode == "delta" or mode == "ghost", "dragMode must be 'position', 'delta', or 'ghost'")
+    self.dragMode = mode
+    return self
+end
+
+---Configure whether this widget is a drop target
+---@param dropTarget boolean Whether the widget can receive drops
+---@return self
+function DraggableMixin:setDropTarget(dropTarget)
+    self.isDropTarget = dropTarget
+    return self
+end
+
+---Set the drag handle rectangle
+---@param rect table? Rectangle {x, y, width, height} relative to widget, or nil to allow drag from anywhere
+---@return self
+function DraggableMixin:setDragHandle(rect)
+    self.dragHandle = rect
+    return self
+end
+
+---Check if a point is within the drag handle
+---Requires PositionableMixin
+---@param x number X coordinate
+---@param y number Y coordinate
+---@return boolean True if point is in drag handle
+function DraggableMixin:isInDragHandle(x, y)
+    if not Mixin.hasMixin(self, PositionableMixin) then
+        error("DraggableMixin:isInDragHandle requires PositionableMixin")
+    end
+
+    ---@cast self PositionableMixin | DraggableMixin
+    if not AABB.containsPoint(x, y, self.x, self.y, self.width, self.height) then
+        return false
+    end
+
+    -- If no drag handle specified, entire widget is draggable
+    if not self.dragHandle then
+        return true
+    end
+
+    local localX = x - self.x
+    local localY = y - self.y
+
+    local handleX = self.dragHandle.x or 0
+    local handleY = self.dragHandle.y or 0
+
+    -- width/height of 0 means full widget dimension
+    local handleWidth = self.dragHandle.width == 0 and self.width or (self.dragHandle.width or self.width)
+    local handleHeight = self.dragHandle.height == 0 and self.height or (self.dragHandle.height or self.height)
+
+    return AABB.containsPoint(localX, localY, handleX, handleY, handleWidth, handleHeight)
+end
+
+---Check if this widget is currently being dragged
+---@return boolean True if widget is currently being dragged
+function DraggableMixin:isDragging()
+    if not Mixin.hasMixin(self, ParentableMixin) then
+        error("DraggableMixin:isDragging requires ParentableMixin")
+    end
+
+    ---@cast self ParentableMixin | DraggableMixin
+    local host = self:getHost()
+    return host and host.isWidgetDragged and host:isWidgetDragged(self) or false
+end
+
+return DraggableMixin

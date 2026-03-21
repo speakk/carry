@@ -1,0 +1,228 @@
+local EnnuiRoot = (...):sub(1, (...):len() - (".layout.vertical_layout_strategy"):len())
+local LayoutStrategy = require(EnnuiRoot .. ".layout.layout_strategy")
+
+---@class VerticalLayoutStrategy : LayoutStrategy
+local VerticalLayoutStrategy = {}
+VerticalLayoutStrategy.__index = VerticalLayoutStrategy
+setmetatable(VerticalLayoutStrategy, {
+    __index = LayoutStrategy,
+    __call = function(class, ...)
+        return class.new(...)
+    end
+})
+
+---Creates a new VerticalLayoutstrategy
+---@return VerticalLayoutStrategy
+function VerticalLayoutStrategy.new()
+    local self = setmetatable(LayoutStrategy(), VerticalLayoutStrategy) ---@cast self VerticalLayoutStrategy
+    return self
+end
+
+---@param widget Widget The widget being measured
+---@param availableWidth number Available width
+---@param availableHeight number Available height
+---@return number desiredWidth, number desiredHeight
+function VerticalLayoutStrategy:measure(widget, availableWidth, availableHeight)
+    local widthForChildren = availableWidth
+    local preferredWidth = widget.preferredWidth
+
+    if type(preferredWidth) == "number" then
+        widthForChildren = preferredWidth
+    elseif preferredWidth.type == "fixed" then
+        widthForChildren = preferredWidth.value
+    elseif preferredWidth.type == "percent" then
+        widthForChildren = availableWidth * preferredWidth.value
+    elseif preferredWidth.type == "fill" then
+        widthForChildren = availableWidth
+    end
+
+    if widget.minWidth and widget.minWidth > 0 then
+        widthForChildren = math.max(widthForChildren, widget.minWidth)
+    end
+
+    if widget.maxWidth and widget.maxWidth > 0 then
+        widthForChildren = math.min(widthForChildren, widget.maxWidth)
+    end
+
+    local contentWidth = widthForChildren - widget.padding.left - widget.padding.right
+    local contentHeight = availableHeight - widget.padding.top - widget.padding.bottom
+
+    local maxChildWidth = 0
+    local totalFixedHeight = 0
+    local fillCount = 0
+    local fillTotalWeight = 0
+    local percentTotalRatio = 0
+
+    for i, child in ipairs(widget.children) do
+        if child:isVisible() then
+            if i > 1 then
+                totalFixedHeight = totalFixedHeight + self.spacing
+            end
+
+            local childContentWidth = contentWidth - child.margin.left - child.margin.right
+            child:measure(childContentWidth, contentHeight)
+
+            maxChildWidth = math.max(maxChildWidth, child.desiredWidth + child.margin.left + child.margin.right)
+
+            local verticalMargin = child.margin.top + child.margin.bottom
+            if type(child.preferredHeight) == "number" then
+                totalFixedHeight = totalFixedHeight + child.desiredHeight + verticalMargin
+            else
+                if child.preferredHeight.type == "fill" then
+                    fillCount = fillCount + 1
+                    fillTotalWeight = fillTotalWeight + (child.preferredHeight.weight or 1)
+                    totalFixedHeight = totalFixedHeight + verticalMargin
+                elseif child.preferredHeight.type == "percent" then
+                    percentTotalRatio = percentTotalRatio + child.preferredHeight.value
+                    totalFixedHeight = totalFixedHeight + verticalMargin
+                else
+                    totalFixedHeight = totalFixedHeight + child.desiredHeight + verticalMargin
+                end
+            end
+        end
+    end
+
+    local desiredWidth
+    local preferredWidth = widget.preferredWidth
+
+    if type(preferredWidth) == "number" then
+        desiredWidth = preferredWidth
+    else
+        if preferredWidth.type == "fixed" then
+            desiredWidth = preferredWidth.value
+        elseif preferredWidth.type == "percent" then
+            desiredWidth = availableWidth * preferredWidth.value
+        elseif preferredWidth.type == "auto" then
+            desiredWidth = maxChildWidth + widget.padding.left + widget.padding.right
+        elseif preferredWidth.type == "fill" then
+            desiredWidth = availableWidth
+        else
+            desiredWidth = 100
+        end
+    end
+
+    local desiredHeight
+    local preferredHeight = widget.preferredHeight
+
+    if type(preferredHeight) == "number" then
+        desiredHeight = preferredHeight
+    else
+        if preferredHeight.type == "fixed" then
+            desiredHeight = preferredHeight.value
+        elseif preferredHeight.type == "percent" then
+            desiredHeight = availableHeight * preferredHeight.value
+        elseif preferredHeight.type == "auto" then
+            local estimatedFillHeight = fillCount * 20
+            local estimatedPercentHeight = percentTotalRatio * contentHeight
+            desiredHeight = totalFixedHeight + estimatedFillHeight + estimatedPercentHeight + widget.padding.top + widget.padding.bottom
+        elseif preferredHeight.type == "fill" then
+            desiredHeight = availableHeight
+        else
+            desiredHeight = 100
+        end
+    end
+
+    if widget.minWidth and widget.minWidth > 0 then
+        ---@diagnostic disable-next-line: param-type-mismatch
+        desiredWidth = math.max(desiredWidth, widget.minWidth)
+    end
+    if widget.maxWidth and widget.maxWidth > 0 then
+        ---@diagnostic disable-next-line: param-type-mismatch
+        desiredWidth = math.min(desiredWidth, widget.maxWidth)
+    end
+    if widget.minHeight and widget.minHeight > 0 then
+        ---@diagnostic disable-next-line: param-type-mismatch
+        desiredHeight = math.max(desiredHeight, widget.minHeight)
+    end
+    if widget.maxHeight and widget.maxHeight > 0 then
+        ---@diagnostic disable-next-line: param-type-mismatch
+        desiredHeight = math.min(desiredHeight, widget.maxHeight)
+    end
+
+    assert(desiredWidth, "desiredWidth should be defined")
+    assert(desiredHeight, "desiredHeight should be defined")
+    return desiredWidth, desiredHeight
+end
+
+---@param widget Widget The widget being arranged
+---@param contentX number X position of content area (after padding)
+---@param contentY number Y position of content area (after padding)
+---@param contentWidth number Width of content area (after padding)
+---@param contentHeight number Height of content area (after padding)
+function VerticalLayoutStrategy:arrangeChildren(widget, contentX, contentY, contentWidth, contentHeight)
+    local totalFixedHeight = 0
+    local fillTotalWeight = 0
+    local percentTotalRatio = 0
+
+    for i, child in ipairs(widget.children) do
+        if child:isVisible() then
+            if i > 1 then
+                totalFixedHeight = totalFixedHeight + self.spacing
+            end
+
+            local verticalMargin = child.margin.top + child.margin.bottom
+            if type(child.preferredHeight) == "number" then
+                totalFixedHeight = totalFixedHeight + child.desiredHeight + verticalMargin
+            elseif child.preferredHeight.type == "fill" then
+                fillTotalWeight = fillTotalWeight + (child.preferredHeight.weight or 1)
+                totalFixedHeight = totalFixedHeight + verticalMargin
+            elseif child.preferredHeight.type == "percent" then
+                percentTotalRatio = percentTotalRatio + child.preferredHeight.value
+                totalFixedHeight = totalFixedHeight + verticalMargin
+            else
+                totalFixedHeight = totalFixedHeight + child.desiredHeight + verticalMargin
+            end
+        end
+    end
+
+    local remainingHeight = math.max(0, contentHeight - totalFixedHeight)
+
+    local clampedPercentRatio = math.min(1.0, percentTotalRatio)
+
+    -- Calculate how much space percent children need
+    local percentHeight = remainingHeight * clampedPercentRatio
+    local fillHeight = math.max(0, remainingHeight - percentHeight)
+
+    local currentY = contentY
+    for i, child in ipairs(widget.children) do
+        if child:isVisible() then
+            if i > 1 then
+                currentY = currentY + self.spacing
+            end
+
+            currentY = currentY + child.margin.top
+
+            local childHeight
+            if type(child.preferredHeight) == "number" then
+                childHeight = child.desiredHeight
+            elseif child.preferredHeight.type == "fill" then
+                local weight = child.preferredHeight.weight or 1
+                childHeight = fillTotalWeight > 0 and (fillHeight * (weight / fillTotalWeight)) or 0
+            elseif child.preferredHeight.type == "percent" then
+                -- Calculate percent based on remaining space, not total space
+                childHeight = remainingHeight * child.preferredHeight.value
+            else
+                childHeight = child.desiredHeight
+            end
+
+            local childWidth = child.desiredWidth
+            local availableWidth = contentWidth - child.margin.left - child.margin.right
+
+            local childX = contentX + child.margin.left
+            if child.horizontalAlignment == "center" then
+                childX = contentX + child.margin.left + (availableWidth - childWidth) / 2
+            elseif child.horizontalAlignment == "right" then
+                childX = contentX + contentWidth - child.margin.right - childWidth
+            elseif child.horizontalAlignment == "stretch" then
+                childX = contentX + child.margin.left
+                childWidth = availableWidth
+            end
+
+            child:arrange(childX, currentY, childWidth, childHeight)
+
+            currentY = currentY + childHeight + child.margin.bottom
+        end
+    end
+end
+
+return VerticalLayoutStrategy

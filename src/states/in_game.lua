@@ -18,6 +18,8 @@ function in_game:enter(_)
 	Concord.entity(self.world)
 		:give("map", "map02")
 		:give("position", 0, 0)
+
+		self.world:emit("resize", love.graphics.getDimensions())
 end
 
 function in_game:update(dt)
