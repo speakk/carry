@@ -1,5 +1,7 @@
 local Sound = Concord.system({})
 
+local music = love.audio.newSource("assets/sounds/speak-counter_a.mp3", "static")
+
 local collect_sound = love.audio.newSource("assets/sounds/collect1.ogg", "static")
 
 local hit_sounds = {
@@ -8,6 +10,18 @@ local hit_sounds = {
 }
 
 local clink = love.audio.newSource("assets/sounds/clink1.ogg", "static")
+
+function Sound:init()
+	-- TODO: Do this on in-game start event (which doesn't exist yet)
+	music:setVolume(0.04)
+	music:play()
+end
+
+function Sound:update(_)
+	if not music:isPlaying() then
+		music:play()
+	end
+end
 
 function Sound:player_collided_with_player(player_shape_a, player_shape_b)
 	local vel_x, vel_y = player_shape_a:getBody():getLinearVelocity()
