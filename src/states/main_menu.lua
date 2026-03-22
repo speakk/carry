@@ -93,18 +93,6 @@ function state:enter(states)
 	host:addChild(container)
 end
 
-function state:update(dt)
-	host:update(dt)
-end
-
-function state:draw()
-	host:draw()
-end
-
-function state:resize(w, h)
-	host:setSize(w, h)
-end
-
 function state:getHost()
 	return host
 end

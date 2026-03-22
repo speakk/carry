@@ -17,14 +17,29 @@ love.graphics.setDefaultFilter("nearest", "nearest")
 
 function love.update(dt)
 	states:update(dt)
+
+	local ennui_host = states:_call("getHost")
+	if ennui_host then
+		ennui_host:update()
+	end
 end
 
 function love.draw()
 	states:draw()
+
+	local ennui_host = states:_call("getHost")
+	if ennui_host then
+		ennui_host:draw()
+	end
 end
 
 function love.resize(w, h)
 	states:_call("resize", w, h)
+
+	local ennui_host = states:_call("getHost")
+	if ennui_host then
+		ennui_host:setSize(w, h)
+	end
 end
 
 function love.mousepressed(x, y, button, isTouch)
@@ -56,9 +71,7 @@ function love.wheelmoved(dx, dy)
 end
 
 function love.keypressed(key, scancode, isRepeat)
-	if key == "escape" then
-		love.event.quit()
-	end
+	states:_call("keypressed", key, scancode, isRepeat)
 
 	local ennui_host = states:_call("getHost")
 	if ennui_host then

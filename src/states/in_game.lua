@@ -1,6 +1,9 @@
+local get_in_game_pause_menu = require 'src.states.in_game_pause'
+
 local in_game = {}
 
-function in_game:enter(_)
+function in_game:enter(states)
+	self.states = states
 	print("Initializing world")
 	self.world = Concord.world()
 
@@ -23,7 +26,9 @@ function in_game:enter(_)
 end
 
 function in_game:update(dt)
-	self.world:emit("update", dt)
+	if not self.paused then
+		self.world:emit("update", dt)
+	end
 end
 
 function in_game:draw()
@@ -32,6 +37,34 @@ end
 
 function in_game:resize(w, h)
 	self.world:emit("resize", w, h)
+end
+
+function in_game:set_pause(pause)
+	self.paused = pause
+
+	if pause then
+		self.pause_menu = get_in_game_pause_menu()
+		self.pause_menu:enter(self.states)
+		self.getHost = function()
+			return self.pause_menu:getHost()
+		end
+
+		print("Set pause trued")
+	else
+		self.pause_menu = nil
+		self.getHost = nil
+		print("Set pause removed")
+	end
+end
+
+function in_game:all_collectables_collected()
+	self:set_pause(true)
+end
+
+function in_game:keypressed(key, scancode, isRepeat)
+	if key == "escape" then
+		self:set_pause(not self.paused)
+	end
 end
 
 return in_game

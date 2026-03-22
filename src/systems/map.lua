@@ -86,6 +86,7 @@ function MapSystem:collectable_object_created(collectable_object)
 	local x, y = collectable_object.x, collectable_object.y
 
 	local collectable = Concord.entity(self:getWorld())
+		:give("collectable")
 		:give("position", x, y)
 		:give("drawable", {
 			sprite = "collectable.png"
