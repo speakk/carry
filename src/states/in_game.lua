@@ -2,12 +2,19 @@ local get_in_game_pause_menu = require 'src.states.in_game_pause'
 
 local in_game = {}
 
+local InGameSystem = Concord.system({})
+
+function InGameSystem:all_collectables_collected()
+	in_game:all_collectables_collected()
+end
+
 function in_game:enter(states)
 	self.states = states
 	print("Initializing world")
 	self.world = Concord.world()
 
 	self.world:addSystems(
+		InGameSystem,
 		Systems.physics,
 		Systems.map,
 		Systems.player_controls,
@@ -44,7 +51,7 @@ function in_game:set_pause(pause)
 
 	if pause then
 		self.pause_menu = get_in_game_pause_menu()
-		self.pause_menu:enter(self.states)
+		self.pause_menu:enter(self.states, self)
 		self.getHost = function()
 			return self.pause_menu:getHost()
 		end
@@ -58,6 +65,7 @@ function in_game:set_pause(pause)
 end
 
 function in_game:all_collectables_collected()
+	print("should set pause, in in game all_collectables_collected")
 	self:set_pause(true)
 end
 

@@ -17,7 +17,7 @@ local button_colors = {
 }
 
 local function style_button(button)
-	button:setSize(200, 80)
+	button:setSize(240, 80)
 	button:setBackgroundColor(unpack(button_colors["normal"]))
 	button:setPressedColor(unpack(button_colors["pressed"]))
 	button:setHoverColor(unpack(button_colors["hover"]))
@@ -28,7 +28,7 @@ function get_menu()
 
 	local in_game_paused = {}
 
-	function in_game_paused:enter(states, completed_level)
+	function in_game_paused:enter(states, in_game, completed_level)
 		host:setSize(love.graphics.getDimensions())
 
 		local title = Text("CounterBalance!")
@@ -44,7 +44,13 @@ function get_menu()
 		local levelCompleteText = Text("Level completed! Your time was: "):setFont(small_font)
 		:setSize(450, ennui.Size.auto())
 
-		local start_button = style_button(TextButton("Start game!")
+		local resume_button = style_button(TextButton("Resume level")
+			:onClick(function(button, event)
+				in_game:set_paused(false)
+			end))
+
+
+		local start_button = style_button(TextButton("Restart level")
 		:onClick(function(button, event)
 			states:set_state("in_game")
 		end))
@@ -94,6 +100,7 @@ function get_menu()
 		end
 
 		button_panel:addChild(start_button)
+		button_panel:addChild(resume_button)
 		button_panel:addChild(quit_button)
 
 		panel:addChild(titles_panel)
