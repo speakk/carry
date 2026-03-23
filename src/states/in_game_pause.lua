@@ -1,6 +1,6 @@
 local ennui = require("libs.ennui")
-local Text = require("libs.ennui.widgets.text")
-local TextButton = require("libs.ennui.widgets.textbutton")
+local Text = ennui.Widgets.Text
+local TextButton = ennui.Widgets.TextButton
 local Rectangle = ennui.Widgets.Rectangle
 local StackPanel = ennui.Widgets.Stackpanel
 
