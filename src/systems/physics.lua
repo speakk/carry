@@ -93,6 +93,10 @@ function PhysicsSystem:init()
 	self.pool.onRemoved = function(_, entity)
 		entity.physics_object.body:destroy()
 	end
+
+	self.physics_world.onRemoved = function(_, entity)
+		entity.physics_world.physics_world:destroy()
+	end
 end
 
 function PhysicsSystem:update(dt)

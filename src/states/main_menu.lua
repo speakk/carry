@@ -41,6 +41,7 @@ function state:enter(states)
 	local start_button = style_button(TextButton("Start game!")
     :onClick(function(button, event)
 				states:set_state("in_game")
+				states:_call("setup", 1)
     end))
 
 	local quit_button = style_button(TextButton("Quit")

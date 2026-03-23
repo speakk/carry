@@ -4,13 +4,21 @@ local in_game = {}
 
 local InGameSystem = Concord.system({})
 
+local all_levels = {
+	"testmap", "map01", "map02"
+}
+
 function InGameSystem:all_collectables_collected()
 	in_game:all_collectables_collected()
 end
 
 function in_game:enter(states)
 	self.states = states
-	print("Initializing world")
+end
+
+function in_game:setup(level_index)
+	self.level_index = level_index or 1
+	print("Initializing world with level index", level_index)
 	self.world = Concord.world()
 
 	self.world:addSystems(
@@ -26,7 +34,7 @@ function in_game:enter(states)
 	)
 
 	Concord.entity(self.world)
-		:give("map", "testmap")
+		:give("map", level_index and all_levels[level_index] or "testmap")
 		:give("position", 0, 0)
 
 		self.world:emit("resize", love.graphics.getDimensions())
@@ -66,7 +74,37 @@ end
 
 function in_game:all_collectables_collected()
 	print("should set pause, in in game all_collectables_collected")
+	self:handle_level_finished()
 	self:set_pause(true, true)
+end
+
+function in_game:handle_level_finished()
+	local current_unlocked_level = tonumber(love.filesystem.read("savefile") or 1)
+	if current_unlocked_level >= #all_levels then return end
+	love.filesystem.write("savefile", tostring(current_unlocked_level + 1))
+end
+
+function in_game:is_next_level_available()
+	local current_unlocked_level = tonumber(love.filesystem.read("savefile") or 1)
+	print("unlocked level vs current index", current_unlocked_level, self.level_index)
+	return self.level_index < current_unlocked_level and self.level_index < #all_levels
+end
+
+function in_game:restart_level()
+	self.states:set_state("in_game", true)
+	self.states:_call("setup", self.level_index)
+end
+
+function in_game:go_to_next_level()
+	self.states:set_state("in_game", true)
+	self.states:_call("setup", self.level_index + 1)
+end
+
+function in_game:exit()
+	print("In game exit called")
+	self:set_pause(false)
+	self.world:emit("cleanup")
+	self.world = nil
 end
 
 function in_game:keypressed(key, scancode, isRepeat)

@@ -38,13 +38,17 @@ function get_menu()
 
 		local resume_button = style_button(TextButton("Resume level")
 			:onClick(function(button, event)
-				in_game:set_paused(false)
+				in_game:set_pause(false)
 			end))
 
+		local next_level_button = style_button(TextButton("Next level")
+			:onClick(function(button, event)
+				in_game:go_to_next_level()
+			end))
 
 		local start_button = style_button(TextButton("Restart level")
 		:onClick(function(button, event)
-			states:set_state("in_game")
+			in_game:restart_level()
 		end))
 
 		local quit_button = style_button(TextButton("Quit")
@@ -88,6 +92,9 @@ function get_menu()
 
 		button_panel:addChild(start_button)
 		button_panel:addChild(resume_button)
+		if in_game:is_next_level_available() then
+			button_panel:addChild(next_level_button)
+		end
 		button_panel:addChild(quit_button)
 
 		panel:addChild(titles_panel)
