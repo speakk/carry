@@ -13,7 +13,7 @@ local clink = love.audio.newSource("assets/sounds/clink1.ogg", "static")
 
 function Sound:init()
 	-- TODO: Do this on in-game start event (which doesn't exist yet)
-	music:setVolume(0.04)
+	music:setVolume(0.14)
 	music:play()
 end
 
