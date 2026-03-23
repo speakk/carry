@@ -28,13 +28,14 @@ function get_menu()
 	local in_game_paused = {}
 	local host = ennui.Host():setSize(love.graphics.getDimensions())
 
-	function in_game_paused:enter(states, in_game, completed_level)
+	function in_game_paused:enter(states, in_game, completed_level, time)
 		host:setSize(love.graphics.getDimensions())
 
-		local text = completed_level and "Level completed! Your time was: " or "Game paused. Press ESC to unpause"
+		local time_formatted = string.format("%02d:%02d", time/60, time)
+		local text = completed_level and "Level completed! Your time was: " .. time_formatted or "Game paused. Press ESC to unpause"
 
 		local titleText = Text(text):setFont(big_font)
-		:setSize(450, ennui.Size.auto())
+		:setSize(480, ennui.Size.auto())
 
 		local resume_button = style_button(TextButton("Resume level")
 			:onClick(function(button, event)

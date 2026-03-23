@@ -18,6 +18,8 @@ end
 
 function in_game:setup(level_index)
 	self.level_index = level_index or 1
+	self.timer = 0
+
 	print("Initializing world with level index", level_index)
 	self.world = Concord.world()
 
@@ -43,11 +45,19 @@ end
 function in_game:update(dt)
 	if not self.paused then
 		self.world:emit("update", dt)
+		self.timer = self.timer + dt
 	end
+end
+
+local function format_time(time)
+	return string.format("%02d:%02d", time/60, time)
 end
 
 function in_game:draw()
 	self.world:emit("draw")
+
+	love.graphics.setColor(1, 1, 1, 1)
+	love.graphics.print("Time: " .. format_time(self.timer), 50, 50)
 end
 
 function in_game:resize(w, h)
@@ -59,7 +69,7 @@ function in_game:set_pause(pause, finished_level)
 
 	if pause then
 		self.pause_menu = get_in_game_pause_menu()
-		self.pause_menu:enter(self.states, self, finished_level)
+		self.pause_menu:enter(self.states, self, finished_level, self.timer)
 		self.getHost = function()
 			return self.pause_menu:getHost()
 		end
