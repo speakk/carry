@@ -5,7 +5,7 @@ local in_game = {}
 local InGameSystem = Concord.system({})
 
 local all_levels = {
-	"testmap", "map01", "map02"
+	"map01", "map02", "map03"
 }
 
 function InGameSystem:all_collectables_collected()
