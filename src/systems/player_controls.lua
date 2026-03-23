@@ -75,7 +75,7 @@ function PlayerControls:update(dt)
 
 		local movement_speed = 300
 
-		local input_x, input_y = player_input:get("move")
+		local input_x = player_input:get("move")
 		--local on_ground = entity.player_controlled.on_ground
 		local on_ground = positionOnGround(entity.position.x, entity.position.y + 20, loaded_map)
 
@@ -84,7 +84,7 @@ function PlayerControls:update(dt)
 		if not on_ground then
 			control_multiply = 0.5
 		end
-		body:applyForce(input_x * movement_speed * control_multiply, input_y * movement_speed * control_multiply)
+		body:applyForce(input_x * movement_speed * control_multiply, 0)
 
 		local shape = body:getShape()
 

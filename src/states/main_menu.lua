@@ -9,6 +9,7 @@ local host = ennui.Host():setSize(love.graphics.getDimensions())
 local title_font = love.graphics.newFont("assets/fonts/ThaleahFat.ttf", 64, "mono")
 local big_font = love.graphics.newFont("assets/fonts/ThaleahFat.ttf", 48, "mono")
 local small_font = love.graphics.newFont("assets/fonts/m5x7.ttf", 24)
+local guide_font = love.graphics.newFont("assets/fonts/m5x7.ttf", 32)
 love.graphics.setFont(big_font)
 
 local state = {}
@@ -43,6 +44,15 @@ function state:enter(states)
 				states:set_state("in_game")
 				states:_call("setup", 1)
     end))
+	
+		local playing_guide = Text([[
+Collect all the sparkly spheres to progress to next level
+Arrows or a & d to move
+Space or z to jump
+Shift or x to hold on to walls/break
+		]])
+		:setTextHorizontalAlignment("center")
+		:setFont(guide_font)
 
 	local quit_button = style_button(TextButton("Quit")
     :onClick(function(button, event)
@@ -90,6 +100,8 @@ function state:enter(states)
 	panel:addChild(titles_panel)
 	panel:addChild(spacer)
 	panel:addChild(button_panel)
+	
+	panel:addChild(playing_guide)
 
 	host:addChild(container)
 end
