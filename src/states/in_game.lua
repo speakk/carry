@@ -26,7 +26,7 @@ function in_game:enter(states)
 	)
 
 	Concord.entity(self.world)
-		:give("map", "map02")
+		:give("map", "testmap")
 		:give("position", 0, 0)
 
 		self.world:emit("resize", love.graphics.getDimensions())
@@ -46,27 +46,27 @@ function in_game:resize(w, h)
 	self.world:emit("resize", w, h)
 end
 
-function in_game:set_pause(pause)
+function in_game:set_pause(pause, finished_level)
 	self.paused = pause
 
 	if pause then
 		self.pause_menu = get_in_game_pause_menu()
-		self.pause_menu:enter(self.states, self)
+		self.pause_menu:enter(self.states, self, finished_level)
 		self.getHost = function()
 			return self.pause_menu:getHost()
 		end
 
 		print("Set pause trued")
 	else
-		self.pause_menu = nil
 		self.getHost = nil
+		self.pause_menu = nil
 		print("Set pause removed")
 	end
 end
 
 function in_game:all_collectables_collected()
 	print("should set pause, in in game all_collectables_collected")
-	self:set_pause(true)
+	self:set_pause(true, true)
 end
 
 function in_game:keypressed(key, scancode, isRepeat)

@@ -4,10 +4,9 @@ local TextButton = require("libs.ennui.widgets.textbutton")
 local Rectangle = ennui.Widgets.Rectangle
 local StackPanel = ennui.Widgets.Stackpanel
 
-local host = ennui.Host():setSize(love.graphics.getDimensions())
 
 local title_font = love.graphics.newFont("assets/fonts/ThaleahFat.ttf", 64, "mono")
-local big_font = love.graphics.newFont("assets/fonts/ThaleahFat.ttf", 48, "mono")
+local big_font = love.graphics.newFont("assets/fonts/ThaleahFat.ttf", 32, "mono")
 local small_font = love.graphics.newFont("assets/fonts/m5x7.ttf", 24)
 
 local button_colors = {
@@ -27,21 +26,14 @@ end
 function get_menu()
 
 	local in_game_paused = {}
+	local host = ennui.Host():setSize(love.graphics.getDimensions())
 
 	function in_game_paused:enter(states, in_game, completed_level)
 		host:setSize(love.graphics.getDimensions())
 
-		local title = Text("CounterBalance!")
-		:setFont(title_font)
-		:setColor(0.55, 0.65, 1.0)
-		--:setSize(ennui.Size.auto(), 28)
-		:setSize(460, 28)
-		:setTextHorizontalAlignment("center")
-		local subtitle = Text("by speak"):setFont(small_font)
-		:setTextHorizontalAlignment("right")
-		:setSize(450, ennui.Size.auto())
+		local text = completed_level and "Level completed! Your time was: " or "Game paused. Press ESC to unpause"
 
-		local levelCompleteText = Text("Level completed! Your time was: "):setFont(small_font)
+		local titleText = Text(text):setFont(big_font)
 		:setSize(450, ennui.Size.auto())
 
 		local resume_button = style_button(TextButton("Resume level")
@@ -79,7 +71,7 @@ function get_menu()
 		local titles_panel = StackPanel()
 		:setSpacing(15)
 		:setPadding(10)
-		:setSize(ennui.Size.auto(), 80)
+		:setSize(ennui.Size.auto(), 50)
 		:setVerticalAlignment("center")
 		:setHorizontalAlignment("center")
 
@@ -92,12 +84,7 @@ function get_menu()
 
 		container:addChild(panel)
 
-		titles_panel:addChild(title)
-		titles_panel:addChild(subtitle)
-
-		if completed_level then
-			titles_panel:addChild(levelCompleteText)
-		end
+		titles_panel:addChild(titleText)
 
 		button_panel:addChild(start_button)
 		button_panel:addChild(resume_button)

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="12" height="12" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="34">
+ <editorsettings>
+  <export format="lua"/>
+ </editorsettings>
+ <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32" tilecount="4" columns="4">
+  <image source="../sprites/tiles.png" width="128" height="32"/>
+ </tileset>
+ <layer id="1" name="tiles" width="12" height="12">
+  <properties>
+   <property name="collidable" type="bool" value="true"/>
+   <property name="friction" type="float" value="1"/>
+  </properties>
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,1,1,1,1,
+1,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,1,1,1,1,1,1,1,1,
+1,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,1,
+1,1,1,1,1,1,1,1,1,1,1,1
+</data>
+ </layer>
+ <objectgroup id="2" name="collectables">
+  <properties>
+   <property name="collectable" type="bool" value="true"/>
+  </properties>
+  <object id="24" x="177.549" y="311.377">
+   <point/>
+  </object>
+  <object id="25" x="310.21" y="307.733">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="3" name="player_spawn">
+  <object id="33" x="53.6336" y="331.948">
+   <point/>
+  </object>
+ </objectgroup>
+</map>
